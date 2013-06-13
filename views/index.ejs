@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+	<script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/jquery.min.js"></script>
+    <script src="/javascripts/skrypt.js"></script>
+
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Witaj w <%= title %></p>
+    
+    <div id="MainPageFrame"> 
+		<p>
+		<form action ="/login" method="POST" >
+		<input type="text" name="user" /> Nazwa <br/>
+		<input type="text" name="password" /> Hasło <br/>
+		<input type="submit" value="Loguj" />
+		</form>
+		</p>
+    <div id="log">
+		<ul>
+		</ul>
+    
+    </div>
+    </div>
+  </body>
+</html>
