@@ -171,9 +171,6 @@ $(function() {
 		
 		var log = $('#gamelog ul:first-child');
 		
-		
-		
-		console.log(data);
 		log.empty();
 		log.append('<li> Ilość zarejestrowanych grczy: ' + data.clients.length + '</li>Obecni:');
 		for (var key in data.clients) {

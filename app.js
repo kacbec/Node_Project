@@ -19,7 +19,7 @@ var server = http.createServer(app);
 var io = require("socket.io").listen(server);
 var socket, players = [] ;	
 
-mongoose.connect('mongodb://localhost/demo-chat');
+mongoose.connect('mongodb://localhost/OddWorld');
 
 
 app.set('port', process.env.PORT || 3000);

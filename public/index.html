@@ -1,14 +1,17 @@
 <html lang="en"><head>
   <meta charset="utf-8">
 	<title>Odd World</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="javascripts/main.js"></script>
 </head>
 <body>
 	<h1>Witaj w Odd World</h1>
 	<div id="login" class="row">
 		<div class="row login-form" style="display: block;">
-				<div class="span12 form-inline">
+				<div class="form-inline">
 					<span>Login form:</span><br />
 					<input id="nickname" type="text" placeholder="Your Nickname here..."> <br />
 					<input id="pass" type="password" placeholder="Your pass here..."><br />
@@ -18,7 +21,7 @@
 				</div>
 			</div>
 			<div class="row logout-form" style="display: none;">
-				<div class="span12 form-inline">
+				<div class="form-inline">
 					<label>Welcome <strong><span class="nickname-display">johndoe9</span></strong></label>
 					<button class="btn logout">Logout</button>
 				</div>
@@ -70,9 +73,7 @@
 			<ul></ul>
 			<ul></ul>
 	</div>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
-	<script type="text/javascript" src="javascripts/main.js"></script>
+	
 
 
 </body></html>
