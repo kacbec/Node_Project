@@ -6,9 +6,10 @@ exports.ClientSchema = new mongoose.Schema({
 	nickname: '',
 	pass: '',
 	lev: '',
-	location: '',
+	pos: '',
 	hp: '',
-	xp: ''
+	xp: '',
+	islogin: Boolean
 });
 
 exports.ClientModel = mongoose.model('clients', exports.ClientSchema);

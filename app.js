@@ -10,7 +10,6 @@ var express = require('express')
   , path = require('path')
   , mongoose = require('mongoose')
   , session = require('./controllers/session_controller')
-  , message = require('./controllers/message_controller')
   , reg = require('./controllers/reg_controller');
 
 
@@ -44,30 +43,23 @@ server.listen(app.get('port'), function(){
 
 
 io.sockets.on('connection', function(socket) {
-
-	// Handle chat logins
+	
+	session.clients(io, socket);
+	
 	socket.on('login attempt', function(data) {
 		session.login(io, socket, data);
-		console.log('log');
 	});
 	
-	// Handle chat logins
+	
 	socket.on('reg attempt', function(data) {
 		session.reg(io, socket, data);
-		console.log('reg');
 	});
 
-	// handle chat logouts
+	
 	socket.on('logout attempt', function(data) {
 		session.logout(io, socket, data);
 	});
 
-	// Handle messages
-	socket.on('message', function(data) {
-		message.message(io, socket, data);
-	});
-
-	// Handle disconnects
 	socket.on('disconnect', function(data) {
 		session.disconnect(io, socket, data);
 	});

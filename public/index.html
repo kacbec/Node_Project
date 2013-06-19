@@ -1,27 +1,20 @@
 <html lang="en"><head>
   <meta charset="utf-8">
-	<title>Socket.io Test</title>
+	<title>Odd World</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
 </head>
-<body class="container">
-
-	<div id="title" class="row">
-		<div class="span12">
-			<h1>Socket.io Demo</h1>
-			
-		</div>
-	</div>
-
+<body>
+	<h1>Witaj w Odd World</h1>
 	<div id="login" class="row">
-		<div class="span12">
-			<div class="row login-form" style="display: block;">
+		<div class="row login-form" style="display: block;">
 				<div class="span12 form-inline">
-					<input id="nickname" type="text" placeholder="Your Nickname here...">
-					<input id="pass" type="password" placeholder="Your pass here...">
+					<span>Login form:</span><br />
+					<input id="nickname" type="text" placeholder="Your Nickname here..."> <br />
+					<input id="pass" type="password" placeholder="Your pass here..."><br />
 					<button class="btn login">Login</button>
 					
-					<span id="reg">Register</span>
+					<button id="reg">Register</span>
 				</div>
 			</div>
 			<div class="row logout-form" style="display: none;">
@@ -31,16 +24,19 @@
 				</div>
 			</div>
 			
-			<div class="span12 form-inline" id="regcont">
-					<input id="nickname1" type="text" placeholder="Your Nickname here...">
-					<input id="pass1" type="password" placeholder="Your pass here...">
+			<div id="regcont">
+					<span>Register form:</span><br />
+					<input id="nickname1" type="text" placeholder="Your Nickname here..."><br />
+					<input id="pass1" type="password" placeholder="Your pass here..."><br />
 					<button class="btn register">Register</button>
+					<button id="log">Login</span>
 			</div>
 		</div>
 	</div>
 
 	<div id="map"  >
 		<div class="menu">	
+		Akcje: 
 			<ul>
 				<li id="walcz" class="link">Walcz</li>
 				<li id="go_n" class="link">Na północ</li>
@@ -49,23 +45,29 @@
 				<li id="go_w" class="link">zachód</li>
 			</ul>
 		</div>
-		<div id="dane">
-			<ul>
-				<li id="pos">Pozycja: <span></span></li>
-				<li id="lev">Poziom: <span></span></li>
-				<li id="hp">HP: <span></span></li>
-				
-			</ul>
-		</div>
+		
 		
 		<div class="mapa">			
 		</div>
 		
+		<div id="dane">
+			
+			Statystyki:
+			<ul>
+				<li id="pos">Pozycja: <span></span></li>
+				<li id="lev">Poziom: <span></span></li>
+				<li id="hp">HP: <span></span></li>
+				<li id="xp">Xp: <span></span></li>
+			</ul>
+		</div>
 		<div id="log">
 				
 		</div>
 	</div>
 
+	<div id="gamelog">
+			<ul></ul>
+	</div>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="javascripts/main.js"></script>

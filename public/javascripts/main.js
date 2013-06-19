@@ -5,9 +5,15 @@ $(function() {
 			$('.login-form').hide();
 			$('.logout-form').show();
 			$('.nickname-display').text(data.nickname);
+			$('#hp span').text(data.hp);
+			$('#xp span').text(data.xp);
+			$('#pos span').text(data.pos);
+			$('#lev span').text(data.lev);
+						
+			$('#regcont').removeClass('show');
 			$('#map').addClass('show');
 			console.log('loged');
-			
+			console.log(data);
 		});
 		
 	socket.on('login error', function(data) {
@@ -17,7 +23,8 @@ $(function() {
 	socket.on('logout ok', function(data) {
 			$('.logout-form').hide();
 			$('.login-form').show();
-		
+			
+			$('#map').removeClass('show');
 		});
 	
 	socket.on('reg ok', function(data) {
@@ -27,7 +34,7 @@ $(function() {
 			$('#hp span').text(data.hp);
 			$('#xp span').text(data.xp);
 			$('#pos span').text(data.pos);
-			
+			$('#lev span').text(data.lev);
 						
 			$('#regcont').removeClass('show');
 			$('#map').addClass('show');
@@ -52,6 +59,7 @@ $(function() {
 	
 	
 	$('.btn.logout').click(function() {
+		this.nickname = $('.nickname-display').text();
 		socket.emit('logout attempt', {
 			nickname: this.nickname
 		});
@@ -59,13 +67,19 @@ $(function() {
 	});
 	
 	$('#reg').click(function() {
-		console.log('aa');
 		$('#regcont').addClass('show');
+		$('.login-form').hide();
+		return false;
+	});
+	
+	$('#log').click(function() {
+		$('#regcont').removeClass('show');
+		$('.login-form').show();
 		return false;
 	});
 	
 	$('.btn.register').click(function() {
-		console.log('reg');
+		
 		this.nickname = $('#nickname1').val();
 		this.pass = $('#pass1').val();
 		
@@ -80,8 +94,8 @@ $(function() {
 	
 	
 	$('#go_n').click(function() {
-		this.nickname = $('.nickname-display').val();
-		this.poz = $('#pos span').val();
+		this.nickname = $('.nickname-display').text();
+		this.poz = $('#pos span').text();
 				
 		socket.emit('lgo_n', 
 		{
@@ -92,8 +106,8 @@ $(function() {
 	});
 	
 	$('#go_s').click(function() {
-		this.nickname = $('.nickname-display').val();
-		this.poz = $('#pos span').val();
+		this.nickname = $('.nickname-display').text();
+		this.poz = $('#pos span').text();
 				
 		socket.emit('lgo_s', 
 		{
@@ -104,8 +118,8 @@ $(function() {
 	});
 	
 	$('#go_w').click(function() {
-		this.nickname = $('.nickname-display').val();
-		this.poz = $('#pos span').val();
+		this.nickname = $('.nickname-display').text();
+		this.poz = $('#pos span').text();
 				
 		socket.emit('lgo_w', 
 		{
@@ -116,8 +130,8 @@ $(function() {
 	});
 	
 	$('#go_e').click(function() {
-		this.nickname = $('.nickname-display').val();
-		this.poz = $('#pos span').val();
+		this.nickname = $('.nickname-display').text();
+		this.poz = $('#pos span').text();
 				
 		socket.emit('lgo_e', 
 		{
@@ -127,6 +141,25 @@ $(function() {
 		return false;
 	});
 	
+	
+	
+	
+	socket.on('clients', 
+		function(data){
+		
+		var log = $('#gamelog ul');
+		
+		
+		
+		console.log(data);
+		log.empty();
+		log.append('<li> Ilość zarejestrowanych grczy: ' + data.clients.length + '</li>');
+		for (var key in data.clients) {
+			if(data.clients[key].islogin)
+				log.append('<li>' + data.clients[key].nickname + '</li>');
+		}
+		
+	});
 
 
 });

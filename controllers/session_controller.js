@@ -1,18 +1,14 @@
 var ClientModel = require('../models/client_model').ClientModel;
 
-// Someone tries to login
 exports.login = function(io, socket, data) {
 	
-	console.log(data);
-	// No nickname? Sorry
 	if (!data.nickname || !data.pass ) {
-		socket.emit('error', {
+		socket.emit('login error', {
 			message: 'no nickname provided'
 		});
 		return;
 	}
 
-	// Seach for duplicate nicknames
 	ClientModel.findOne({
 		nickname: data.nickname
 	}, function(err, doc) {
@@ -25,22 +21,37 @@ exports.login = function(io, socket, data) {
 		
 		
 		
-		if (!doc) {
-			console.warn('nblad loginu?', data.nickname);
+		if (doc) {
+			if ( doc.pass != data.pass ){
+					socket.emit('login error', {
+					message: 'Wrong password'
+				});
+			}
+			else {
+				socket.emit('login ok', {
+					nickname: data.nickname,
+					hp: doc.hp,
+					xp: doc.xp,
+					pos: doc.pos,
+					lev: doc.lev
+				});
+				
+			
+				doc.islogin = true;
+				doc.save();
+				exports.clients(io, socket);
+			}
+		}
+		else {
+			console.warn('blad loginu?', data.nickname);
 
 			socket.emit('login error', {
-				message: 'nickname in use'
+				message: 'No such user'
 			});
 			return;
 		}
 		
-		if ( doc.pass == data.pass ){
-			socket.emit('login ok', {
-				nickname: data.nickname
-			});
-
-			exports.clients(io, socket);
-		}
+		
 		
 
 	});
@@ -61,7 +72,6 @@ exports.reg = function(io, socket, data) {
 	ClientModel.findOne({
 		nickname: data.nickname
 	}, function(err, doc) {
-		// Oops...
 		if (err) {
 			socket.emit('error', {
 				message: 'error reading clients list'
@@ -69,17 +79,16 @@ exports.reg = function(io, socket, data) {
 			return;
 		}
 
-		// Duplicated nickname :(
 		if (doc) {
-			console.warn('nickname in use, orphan records?', doc.nickname);
+			console.warn('nickname in use', doc.nickname);
 
 			socket.emit('login error', {
-				message: 'nickname in use'
+				message: 'Nickname in use'
 			});
 			return;
 		}
 
-		// So far, so good! Save new client for future references
+		
 		var client = new ClientModel();
 
 		client.nickname = data.nickname;
@@ -88,26 +97,25 @@ exports.reg = function(io, socket, data) {
 		client.xp = '0';
 		client.hp = '20';
 		client.pos = '' + Math.floor((Math.random()*100)+1) + ':' +Math.floor((Math.random()*100)+1);
-
+		client.lev = 1;
+		client.islogin = false;
+		
 		client.save(function() {
 				socket.emit('reg ok', {
 					nickname: data.nickname,
-					hp: client.xp,
-					xp: client.hp,
+					hp: client.hp,
+					xp: client.xp,
 					pos: client.pos,
-					
-				});
+					lev: client.lev,
+					islogin: false
+			});
 
-			// And finally, broadcas a clients update
 			exports.clients(io, socket);
 		});
 	});
 }
 
-
-// Someone is manually login out
 exports.logout = function(io, socket, data) {
-	// Reuse ;) disconnect
 	exports.disconnect(io, socket, data);
 }
 
@@ -120,33 +128,34 @@ exports.clients = function(io, socket, data) {
 	});
 }
 
-// Oops, disconnected!
+
+
 exports.disconnect = function(io, socket, data) {
-	// Who was she?
+	
+	console.log(data);
 	ClientModel.findOne({
-		socket_id: socket.id
+		nickname: data.nickname
 	}, function(err, doc) {
-		// Oops...
 		if (err) {
 			socket.emit('error', {
 				message: 'error reading clients list'
 			});
 			return;
 		}
+		
 
-		// OMG! A ghost!
 		if (!doc) {
 			socket.emit('logout error', {
 				message: 'client not found'
 			});
 			return;
 		}
+		
+		doc.islogin = false;
+		doc.save();
 
-		// Remove the client from DB to release the nickname
 		socket.emit('logout ok');
 		
-
-		// Broadcast current clients
 		exports.clients(io, socket);
 	});
 }
