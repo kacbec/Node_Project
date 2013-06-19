@@ -5,3 +5,24 @@ body {
 a {
   color: #00b7ff;
 }
+#regcont {
+  display: none;
+}
+#regcont.show {
+  display: block;
+}
+#map {
+  display: none;
+}
+#map.show {
+  display: block;
+}
+#map ul li {
+  display: inline;
+  width: 40px;
+  padding: 5px;
+}
+#map ul li.link {
+  cursor: pointer;
+  text-decoration: underline;
+}
