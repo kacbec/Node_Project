@@ -77,4 +77,8 @@ io.sockets.on('connection', function(socket) {
 		reg.go_n(io, socket, data);
 	});
 	
+	socket.on('walcz', function(data) {
+		reg.walcz(io, socket, data);
+	});
+	
 });

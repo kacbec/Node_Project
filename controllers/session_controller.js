@@ -1,4 +1,6 @@
 var ClientModel = require('../models/client_model').ClientModel;
+var RegModel = require('../models/reg_model').regModel;
+
 
 exports.login = function(io, socket, data) {
 	
@@ -112,6 +114,32 @@ exports.reg = function(io, socket, data) {
 
 			exports.clients(io, socket);
 		});
+		
+		RegModel.findOne({
+			pos: client.pos
+		}, function(err, doc) {
+			if (err) {
+				return -1;
+			}
+		
+			if (!doc) 
+			{
+				var nreg = new RegModel();
+			
+				if( !client.pos )	
+					nreg.pos = '' + Math.floor((Math.random()*100)+1) + ':' +Math.floor((Math.random()*100)+1);
+				else 
+					nreg.pos = client.pos;
+					
+					nreg.level =  Math.floor((Math.random()*10)+1);
+					nreg.defeat = false;
+					nreg.color = 'blue';
+					
+					nreg.save();
+			}
+		});
+		
+		
 	});
 }
 

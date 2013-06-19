@@ -12,19 +12,24 @@ $(function() {
 						
 			$('#regcont').removeClass('show');
 			$('#map').addClass('show');
-			console.log('loged');
-			console.log(data);
 		});
 		
 	socket.on('login error', function(data) {
 			alert(data.message);
 		});
 		
+	socket.on('error', function(data) {
+		alert(data.message);
+	});
+		
 	socket.on('logout ok', function(data) {
 			$('.logout-form').hide();
 			$('.login-form').show();
 			
 			$('#map').removeClass('show');
+			
+			var log = $('#gamelog ul+ul');
+			log.empty();
 		});
 	
 	socket.on('reg ok', function(data) {
@@ -38,8 +43,6 @@ $(function() {
 						
 			$('#regcont').removeClass('show');
 			$('#map').addClass('show');
-			console.log('registered');
-			console.log(data);
 			
 		});
 	
@@ -97,22 +100,23 @@ $(function() {
 		this.nickname = $('.nickname-display').text();
 		this.poz = $('#pos span').text();
 				
-		socket.emit('lgo_n', 
+		socket.emit('go_n', 
 		{
 			nickname: this.nickname,
-			poz: this.poz
+			pos: this.poz
 		});
 		return false;
 	});
 	
 	$('#go_s').click(function() {
+		
 		this.nickname = $('.nickname-display').text();
 		this.poz = $('#pos span').text();
 				
-		socket.emit('lgo_s', 
+		socket.emit('go_s', 
 		{
 			nickname: this.nickname,
-			poz: this.poz
+			pos: this.poz
 		});
 		return false;
 	});
@@ -121,10 +125,10 @@ $(function() {
 		this.nickname = $('.nickname-display').text();
 		this.poz = $('#pos span').text();
 				
-		socket.emit('lgo_w', 
+		socket.emit('go_w', 
 		{
 			nickname: this.nickname,
-			poz: this.poz
+			pos: this.poz
 		});
 		return false;
 	});
@@ -133,33 +137,70 @@ $(function() {
 		this.nickname = $('.nickname-display').text();
 		this.poz = $('#pos span').text();
 				
-		socket.emit('lgo_e', 
+		socket.emit('go_e', 
 		{
 			nickname: this.nickname,
-			poz: this.poz
+			pos: this.poz
+		});
+		return false;
+	});
+	
+	$('#walcz').click(function() {
+		this.nickname = $('.nickname-display').text();
+		this.poz = $('#pos span').text();
+				
+		socket.emit('walcz', 
+		{
+			nickname: this.nickname,
+			pos: this.poz
 		});
 		return false;
 	});
 	
 	
-	
+	socket.on('moveto', function(data){
+		console.log(data);
+		$('#pos span').text(data.pos);
+		$('.mapa').css('background-color', data.color);
+		var log = $('#gamelog ul+ul');
+		log.append('<li>Ruszyłeś się na' + data.pos + '</li>');
+	});
 	
 	socket.on('clients', 
 		function(data){
 		
-		var log = $('#gamelog ul');
+		var log = $('#gamelog ul:first-child');
 		
 		
 		
 		console.log(data);
 		log.empty();
-		log.append('<li> Ilość zarejestrowanych grczy: ' + data.clients.length + '</li>');
+		log.append('<li> Ilość zarejestrowanych grczy: ' + data.clients.length + '</li>Obecni:');
 		for (var key in data.clients) {
 			if(data.clients[key].islogin)
 				log.append('<li>' + data.clients[key].nickname + '</li>');
 		}
 		
 	});
+	
+	socket.on('win', function(data) {
+			$('#xp span').text(data.xp);
+			$('#lev span').text(data.lev);
+			var log = $('#gamelog ul+ul');
+			log.append('<li>Wygrałeś walkę </li>');		
+		
+		});
+	socket.on('draw', function(data) {
+			
+			var log = $('#gamelog ul+ul');
+			log.append('<li>Zremisowałes walkę </li>');		
+			
+		});
 
-
+	socket.on('lose', function(data) {
+			
+			var log = $('#gamelog ul+ul');
+			log.append('<li>Przegrałęs walkę </li>');		
+			
+		});
 });

@@ -5,6 +5,7 @@ exports.regSchema = new mongoose.Schema({
 	pos: '',
 	color: '',
 	level: '',
+	defeat: Boolean
 });
 
 exports.regModel = mongoose.model('reg', exports.regSchema);
